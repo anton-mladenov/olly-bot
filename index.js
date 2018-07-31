@@ -38,9 +38,9 @@ function handleMessage(message) {
 		chuckJoke()
 	} else if (message.includes(" giphy")) {
 		giphyFunc()
-	} else if (message.includes(" Olly")) {
-		ollyFunc()
-	}
+	} else if (message.includes(" hey")) {
+		ollyHey()
+	} 
 }
 
 function chuckJoke () {
@@ -83,7 +83,14 @@ function giphyFunc () {
 			.catch((err) => console.log(err))
 }
 
-function ollyFunc () {
+function ollyHey () {
 	request
-		.get("http://localhost:4000")
+		.get("http://localhost:4000/test")
+		.then(res => {
+			request
+				.post('https://hooks.slack.com/services/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')
+				.set('Content-Type', 'application/json')
+				.send(res.body.cats)
+				.then(console.log(Object.keys(res.body.cats)))
+		})
 }
