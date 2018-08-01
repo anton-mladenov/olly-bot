@@ -44,23 +44,19 @@ function handleMessage(message) {
 function ollyHey() {
 	request
 		.get("http://localhost:4000/hey")
-		.send(res => {
-			console.log("						SEND RES: " + res)
-			return "				WHAAAAT?!:	" + res.toString()
-		})
 		.then(res => {
-			console.log("		FIRST RES MATHAFUCKA!   " + Object.keys(res.body))
-			// request
-			// 	.post('https://hooks.slack.com/services/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')
-			// 	.set('Content-Type', 'application/json')
-			// 	.send({ text: res.body.welcome })
-			// 	.then(res => {
-			// 		console.log("REEEEEEEEESSSSSSS", res)
-			// 		return res 
-			// 	})
-			// 	.catch(err => console.log(err));
+			console.log("		FIRST RES MATHAFUCKA!   " + Object.keys(res))
+			request
+				.post('https://hooks.slack.com/services/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')
+				.set('Content-Type', 'application/json')
+				.send({ text: res.body.welcome })
+				.then(res => {
+					console.log("REEEEEEEEESSSSSSS", res)
+					return res 
+				})
+				.catch(err => console.log("			ERROR FROM INSIDE REQUEST:		" + err));
 		})
-		.catch(err => console.log("			ERRORRRSSSRS:		" + err))
+		.catch(err => console.log("			ERROR FROM OUTSIDE REQUEST:		" + err))
 }
 
 function ollyMatch() {
