@@ -4,7 +4,7 @@ var SlackBot = require('slackbots');
 let time = `${new Date().getHours()}:${new Date().getMinutes()}`;
 
 const bot = new SlackBot({
-	token: "xoxb-215618382279-404376298535-QAhcY9Uwox7Mn7SrG0HaRbj4",
+	token: process.env.BOT_ID || "xoxb-215618382279-404376298535-QAhcY9Uwox7Mn7SrG0HaRbj4",
 	name: "Olly"
 })
 

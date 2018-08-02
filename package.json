@@ -9,6 +9,7 @@
     "superagent": "^3.8.3"
   },
     "scripts": {
-    "start": "nodemon index.js"
+    "postinstall": "yarn tsc",
+    "start": "node index.js"
   }
 }
