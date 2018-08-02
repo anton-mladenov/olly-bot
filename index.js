@@ -33,6 +33,7 @@ bot.on("message", (data) => {
 
 function handleMessage(data) {
 	if (data.user === "U69RFSYHW") { console.log("	MESSAGE: ", data) }
+	// console.log("	MESSAGE: ", data)
 	if (data.text.includes(" hey")) {
 		ollyHey(data.user)
 	} else if (data.text.includes(" match")) {
