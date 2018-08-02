@@ -25,38 +25,52 @@ bot.on("start", () => {
 bot.on("error", (err) => console.log(err))
 
 bot.on("message", (data) => {
-	console.log(data)
 	if (data.type !== "message") {
 		return;
 	}
-	handleMessage(data.text)
+	handleMessage(data)
 })
 
-function handleMessage(message) {
-	console.log("MESSAGE", message)
-	if (message.includes(" hey")) {
-		ollyHey()
-	} else if (message.includes(" match")) {
+function handleMessage(data) {
+	if (data.user === "U69RFSYHW") { console.log("	MESSAGE: ", data) }
+	if (data.text.includes(" hey")) {
+		ollyHey(data.user)
+	} else if (data.text.includes(" match")) {
 		ollyMatch()
-	} 
+	} else if (data.text.includes(" intro")) {
+		ollyIntro(data)
+	}
 }
 
-function ollyHey() {
+function ollyHey(userId) {
+	console.log("	 	")
+	console.log("		Problematic DATA: 	" + userId)
+	console.log("	 	")
 	request
-		.get("http://localhost:4000/hey")
+		.get(`http://localhost:4000/hey/${userId}`)
 		.then(res => {
-			console.log("		FIRST RES MATHAFUCKA!   " + Object.keys(res))
 			request
 				.post('https://hooks.slack.com/services/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')
 				.set('Content-Type', 'application/json')
-				.send({ text: res.body.welcome })
-				.then(res => {
-					console.log("REEEEEEEEESSSSSSS", res)
-					return res 
-				})
-				.catch(err => console.log("			ERROR FROM INSIDE REQUEST:		" + err));
-		})
-		.catch(err => console.log("			ERROR FROM OUTSIDE REQUEST:		" + err))
+				.send( res.body.aboutMeButton )
+				.catch(err => console.log("			ERROR FROM INSIDE REQUEST:   " + err));
+			}
+		)
+		.catch(err => console.log("			ERROR FROM OUTSIDE REQUEST:   " + err))
+}
+
+function ollyIntro() {
+	request
+		.get(`http://localhost:4000/intro`)
+		.then(res => {
+			request
+				.post('https://hooks.slack.com/services/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')
+				.set('Content-Type', 'application/json')
+				.send( { text: res.body.intro } )
+				.catch(err => console.log("			ERROR FROM INSIDE REQUEST:   " + err));
+			}
+		)
+		.catch(err => console.log("			ERROR FROM OUTSIDE REQUEST:   " + err))
 }
 
 function ollyMatch() {
@@ -67,7 +81,7 @@ function ollyMatch() {
 				.post('https://hooks.slack.com/services/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')
 				.set('Content-Type', 'application/json')
 				.send(res.body.cats)
-				.then(console.log(Object.keys(res.body.cats)))
+				.then()
 		})
 }
 
