@@ -4,7 +4,7 @@ var SlackBot = require('slackbots');
 let time = `${new Date().getHours()}:${new Date().getMinutes()}`;
 
 const bot = new SlackBot({
-	token: "xoxb-215618382279-404376298535-QAhcY9Uwox7Mn7SrG0HaRbj4",
+	token: process.env.BOT_ID || "xoxb-215618382279-404376298535-QAhcY9Uwox7Mn7SrG0HaRbj4",
 	name: "Olly"
 })
 
@@ -34,56 +34,32 @@ bot.on("message", (data) => {
 
 function handleMessage(message) {
 	console.log("MESSAGE", message)
-	if (message.includes(" chucknorris")) {
-		chuckJoke()
-	} else if (message.includes(" giphy")) {
-		giphyFunc()
-	} else if (message.includes(" hey")) {
+	if (message.includes(" hey")) {
 		ollyHey()
+	} else if (message.includes(" match")) {
+		ollyMatch()
 	} 
 }
 
-function chuckJoke () {
+function ollyHey() {
 	request
-		.get("https://api.chucknorris.io/jokes/random")
+		.get("http://localhost:4000/hey")
 		.then(res => {
-			const joke = res.body.value
-	
-			// const params = {
-			// 	icon_emoji: ":laughing:"
-			// }
-
-			bot.postMessageToChannel(
-				"bot-testing",
-				`Chuck Norris: ${joke}`,
-				// params
-			)
-	})
+			console.log("		FIRST RES MATHAFUCKA!   " + Object.keys(res))
+			request
+				.post('https://hooks.slack.com/services/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')
+				.set('Content-Type', 'application/json')
+				.send({ text: res.body.welcome })
+				.then(res => {
+					console.log("REEEEEEEEESSSSSSS", res)
+					return res 
+				})
+				.catch(err => console.log("			ERROR FROM INSIDE REQUEST:		" + err));
+		})
+		.catch(err => console.log("			ERROR FROM OUTSIDE REQUEST:		" + err))
 }
 
-function giphyFunc () {
-	request
-			.get("https://bot-back-end.herokuapp.com/giphy/batman")
-			// .get("http://localhost:4000/giphy/duck")
-			.then(res => {
-				// const joke = res.body.data[0].id
-				const joke = res.res.text
-				console.log("here's your joke, bro: " + Object.keys(joke))
-		
-				// const params = {
-				// 	icon_emoji: ":laughing:"
-				// }
-
-				bot.postMessageToChannel(
-					"bot-testing",
-					`Giphy: ${joke}`,
-					// params
-				)
-			})
-			.catch((err) => console.log(err))
-}
-
-function ollyHey () {
+function ollyMatch() {
 	request
 		.get("http://localhost:4000/test")
 		.then(res => {
@@ -94,3 +70,53 @@ function ollyHey () {
 				.then(console.log(Object.keys(res.body.cats)))
 		})
 }
+
+
+
+
+
+
+
+
+
+
+
+// function chuckJoke () {
+// 	request
+// 		.get("https://api.chucknorris.io/jokes/random")
+// 		.then(res => {
+// 			const joke = res.body.value
+	
+// 			// const params = {
+// 			// 	icon_emoji: ":laughing:"
+// 			// }
+
+// 			bot.postMessageToChannel(
+// 				"bot-testing",
+// 				`Chuck Norris: ${joke}`,
+// 				// params
+// 			)
+// 	})
+// }
+
+// function giphyFunc () {
+// 	request
+// 			.get("https://bot-back-end.herokuapp.com/giphy/batman")
+// 			// .get("http://localhost:4000/giphy/duck")
+// 			.then(res => {
+// 				// const joke = res.body.data[0].id
+// 				const joke = res.res.text
+// 				console.log("here's your joke, bro: " + Object.keys(joke))
+		
+// 				// const params = {
+// 				// 	icon_emoji: ":laughing:"
+// 				// }
+
+// 				bot.postMessageToChannel(
+// 					"bot-testing",
+// 					`Giphy: ${joke}`,
+// 					// params
+// 				)
+// 			})
+// 			.catch((err) => console.log(err))
+// }
